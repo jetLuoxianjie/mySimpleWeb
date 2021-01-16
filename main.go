@@ -6,20 +6,14 @@ import (
 )
 
 func main() {
-	s := simpleWeb.New()
-	s.GET("/", func(c *simpleWeb.Context) {
-		c.HTML(http.StatusOK, "<h1>Hello Gee</h1>")
+	r := simpleWeb.Default()
+	r.GET("/", func(c *simpleWeb.Context) {
+		c.String(http.StatusOK, "Hello SimpleWeb\n")
 	})
-	s.GET("/hello", func(c *simpleWeb.Context) {
-		c.String(http.StatusOK, "hello %s, you're at %s\n", c.Query("name"), c.Path)
-	})
-
-	s.POST("/login", func(c *simpleWeb.Context) {
-		c.JSON(http.StatusOK, simpleWeb.H{
-			"username": c.PostForm("username"),
-			"password": c.PostForm("password"),
-		})
+	r.GET("/panic", func(c *simpleWeb.Context) {
+		names := []string{"SimpleWeb"}
+		c.String(http.StatusOK, names[100])
 	})
 
-	s.Run(":9999")
+	r.Run(":9999")
 }
